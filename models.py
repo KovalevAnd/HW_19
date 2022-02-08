@@ -1,3 +1,5 @@
+import hashlib
+
 from marshmallow import Schema, fields
 
 from setup_db import db
@@ -46,3 +48,21 @@ class Genre(db.Model):
 class GenreSchema(Schema):
     id = fields.Int()
     name = fields.Str()
+
+
+class User(db.Model):
+    __tablename__ = 'user'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String)
+    password = db.Column(db.String)
+    role = db.Column(db.String)
+
+    def get_hash(self):
+        return hashlib.md5(self.encode('utf-8')).hexdigest()
+
+
+class UserSchema(Schema):
+    id = fields.Int()
+    username = fields.Str()
+    password = fields.Str()
+    role = fields.Str()
